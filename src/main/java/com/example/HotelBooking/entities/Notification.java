@@ -30,7 +30,7 @@ public class Notification {
     private String bookingReference;
 
     @Enumerated(EnumType.STRING)
-    private NotificationType notificationType;
+    private NotificationType type;
 
 
     private final LocalDateTime createdAt = LocalDateTime.now();

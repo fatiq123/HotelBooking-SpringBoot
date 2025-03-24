@@ -11,23 +11,23 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 @EnableAsync
-public class HotelBookingApplication implements CommandLineRunner {
+public class HotelBookingApplication {
 
-	@Autowired
-	private NotificationService notificationService;
+//	@Autowired
+//	private NotificationService notificationService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(HotelBookingApplication.class, args);
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
-		NotificationDTO notificationDTO = NotificationDTO.builder()
-				.type(NotificationType.EMAIL)
-				.recipient("fatiqhussnain1@gmail.com")
-				.body("I am testing this using command line runner 😊")
-				.subject("Testing Email Sending")
-				.build();
-		notificationService.sendMail(notificationDTO);
-	}
+//	@Override
+//	public void run(String... args) throws Exception {
+//		NotificationDTO notificationDTO = NotificationDTO.builder()
+//				.type(NotificationType.EMAIL)
+//				.recipient("fatiqhussnain1@gmail.com")
+//				.body("I am testing this using command line runner 😊")
+//				.subject("Testing Email Sending")
+//				.build();
+//		notificationService.sendMail(notificationDTO);
+//	}
 }

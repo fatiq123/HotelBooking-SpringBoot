@@ -2,6 +2,7 @@ package com.example.HotelBooking.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +25,7 @@ public class JwtUtils {
     @Value("${secreteJwtString}")
     private String secreteJwtString;
 
+    @PostConstruct
     private void init() {
         byte[] keyByte = secreteJwtString.getBytes(StandardCharsets.UTF_8);
         this.key = new SecretKeySpec(keyByte, "HmacSHA256");
@@ -38,8 +40,18 @@ public class JwtUtils {
                 .compact();
     }
 
+    //    public String getUsernameFromToken(String token) {
+//        return extractClaims(token, Claims::getSubject);
+//    }
     public String getUsernameFromToken(String token) {
-        return extractClaims(token, Claims::getSubject);
+        try {
+            String username = extractClaims(token, Claims::getSubject);
+            log.info("Extracted username from JWT: {}", username);
+            return username;
+        } catch (Exception e) {
+            log.error("Error extracting username from token: {}", e.getMessage());
+            throw new RuntimeException("Invalid token");
+        }
     }
 
     private <T> T extractClaims(String token, Function<Claims, T> claimsTFunction) {
@@ -48,7 +60,9 @@ public class JwtUtils {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getPassword()) && !isTokenExpired(token));
+//        return (username.equals(userDetails.getPassword()) && !isTokenExpired(token));
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+
     }
 
     private boolean isTokenExpired(String token) {
